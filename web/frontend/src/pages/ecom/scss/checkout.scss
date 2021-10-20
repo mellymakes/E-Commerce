@@ -1,0 +1,95 @@
+@import '../../../main-scss/main.scss';
+
+.checkout{
+    margin: 100px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+    'info summary'
+    'paypal summary';
+    grid-column-gap: 40px;
+}
+
+
+.info, .summary, .paypal{
+
+    padding: 20px;
+    background-color: #fff;
+    @include box-shadow;
+}
+
+// .info-paypal{
+//     display: grid;
+//     // grid-row-gap: 10px;
+// }
+
+.info{
+
+    grid-area: info;
+    
+    max-height: 300px;
+
+    &__title{
+        font-weight: 700
+    }
+
+
+    &__input{
+        height: 30px;
+        // display: none;
+    }
+
+    form{
+        margin-top: 30px;
+    }
+
+    &__inputgrid{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        // grid-template-rows: 1fr 100%;
+        grid-gap: 20px
+    }
+    
+    &__btn{
+        display: grid;
+        align-items: center;
+        min-height: 80px;
+
+        button{
+            background-color: $green;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+        }
+    }
+}
+
+
+
+
+.summary{
+    grid-area: summary;
+
+    &__item{
+        display: grid;
+        grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+    }
+
+    &__img{
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__itemname, &__itemprice, &__itemcount{
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+    }
+}
+
+.paypal{
+    margin-top: 20px;
+    grid-area: paypal;
+}

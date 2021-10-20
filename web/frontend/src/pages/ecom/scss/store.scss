@@ -1,0 +1,64 @@
+@import '../../../main-scss/main.scss';
+
+
+
+.store{
+
+    &__paper{
+        background-color: $white;
+        margin: 40px 0;
+        padding: 20px;
+        @include grid-center;
+    }
+
+    &__cardgrid{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-content: center;
+        grid-gap: 20px;
+        
+    }
+}
+
+
+.storecard{
+    padding: 20px;
+    width: 300px;
+    // height: 250px;   
+    background-color: #fff;
+
+    &__img{
+
+        img{
+            width: 100%;
+        }
+    }
+
+    &__menu{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    &__btn button{
+        padding: 10px 20px;
+        background: none;
+        border: 2.5px solid lightcoral;
+        color: lightcoral;
+        font-weight: 500;
+
+        &:hover{
+        background: lightcoral;
+        color: #fff;
+        font-weight: 500;
+        }
+
+        &:active{
+            background-color: darken($color: #f08080, $amount: 10);
+        }
+    }
+
+    &__price{
+        text-align: right;
+        font-weight: bold;
+    }
+}

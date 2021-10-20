@@ -1,0 +1,120 @@
+@import '../../main-scss/main.scss';
+
+.nav{
+    background-color: $green;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navin{
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: right;
+    &__logo{
+
+        @include grid-center;
+        justify-content: left;
+        svg{    
+            width: 100%;
+            max-width: 120px;
+        }
+    }
+
+    &__menu{
+        display: grid;
+        justify-content: right;
+        align-items: center;
+        // grid-template-columns: 1fr 1fr;
+    }
+
+
+    
+
+    &__option{
+        cursor: pointer;
+        @media(max-width: 500px){
+            display: none;
+        }
+    }
+    &__burger{
+        cursor: pointer;
+        @media(min-width: 500px){
+            display: none;
+        }
+    }
+}
+
+
+.dropdown{
+    background-color: $grey;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    top: -1000px;
+    transition: top 500ms;
+
+    &--active{
+        top: 45px;
+    }
+
+    @media(min-width: 500px){
+        display: none;
+    }
+}
+
+
+
+
+.dropin{
+    display: grid;
+    grid-template-columns: 1fr;
+
+    &__option{
+        color: #fff;
+        text-decoration: none;
+        padding: 15px;
+        font-size: 17px;
+        text-align: center;
+    }
+
+    &__activeopt{
+        color: $lgrey;
+        pointer-events: none;
+    }
+}
+
+
+@media(min-width: 500px){
+
+    .navin{
+        min-height: 3rem;
+        justify-content: end;
+        &__menu{
+            display: grid;
+            text-align: right;
+            justify-content: right;
+        }
+
+        &__list{
+            display: flex;
+            // grid-template-columns: 1fr 1fr;
+        }
+        &__option{
+            color: #fff;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 500;
+            padding-left: 40px;
+        }
+        &__activeopt{
+            color: $lgrey;
+            pointer-events: none;
+        }
+    }
+}
+
+

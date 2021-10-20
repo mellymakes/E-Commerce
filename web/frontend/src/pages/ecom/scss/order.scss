@@ -1,0 +1,139 @@
+@import '../../../main-scss/main.scss';
+
+.order{
+
+
+
+    
+    &__paper{
+        background-color: $white;
+        margin: 40px 0;
+        padding: 20px;
+        background: #fff;
+        box-shadow: 6px 6px 5px 0px rgba(229,225,225,0.75);
+-webkit-box-shadow: 6px 6px 5px 0px rgba(229,225,225,0.75);
+-moz-box-shadow: 6px 6px 5px 0px rgba(229,225,225,0.75);
+    }
+
+    &__detailpaper{
+        margin-top: 80px;
+    }
+
+    &__grid{
+        display: grid;
+        grid-template-columns: 1fr;
+        background-color: #fff;
+        grid-gap: 10px;
+        
+
+    }
+
+    &__gridheader{
+        display: grid;
+        grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr
+    }
+
+    &__detailgrid{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 40px;
+        // grid-column: 3;
+        
+
+        div{
+            display: grid;
+            align-items: center;
+        }
+    }
+
+
+    &__noitem{
+        text-align: center;
+    }
+
+    &__checkoutbutton{
+        text-decoration: none;
+        text-align: center;
+        background-color: $green;
+        padding: 10px;
+        color: #fff;
+
+        &--active{
+            background-color: darken($color: $green, $amount: 50);
+            color: #fff;
+        }
+
+        &--disable{
+            text-decoration: none;
+            text-align: center;
+            pointer-events: none;
+            background-color: #ccc;
+            padding: 10px;
+        }
+    }
+    
+}
+
+
+.oi{
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr;
+    &__img{
+    
+        width: 50%;
+        img{
+            width: 100%;
+        }
+    }
+
+    &__item, &__price, &__quantity, &__total{
+
+        font-weight: 600;
+    }
+
+    &__quantity{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+        'num arru'
+        'num arrd';
+         
+    }
+
+    &__arrow{
+        width: 20px;
+        cursor: pointer;
+    }
+
+    &__arrowup{
+        grid-area: arru;
+    }
+    &__arrowdown{
+        grid-area: arrd;
+        
+        svg{
+            transform: rotate(180deg);
+        }
+    }
+}
+
+
+@media(max-width: 600px){
+
+    .order{
+
+        &__detailgrid{
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+
+
+.num{
+
+    display: flex;
+    justify-content: center;
+    // align-self: center;
+    grid-area: num;
+}

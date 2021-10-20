@@ -1,0 +1,26 @@
+@import '../../main-scss/main.scss';
+
+.foot{
+
+   background-color: $grey;
+   z-index: 1000;
+
+   &__main{
+    padding: 40px;
+    @include grid-center;
+    
+    svg{
+        width: 220px;
+    }
+    }
+
+    &__bottext{
+
+        text-align: center;
+        padding-bottom: 1px;
+        opacity: .5;
+        color: $white;
+        font-size: 15px;
+    }
+   
+}

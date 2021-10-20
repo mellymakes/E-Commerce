@@ -1,0 +1,93 @@
+@import '../../../main-scss/main.scss';
+
+
+.signup{
+    height: 120vh;
+    max-height: 800px;
+    position: relative;
+
+    &__box{
+        background-color: #fff;
+        max-width: 300px;
+        min-height: 133px;
+        border-radius: 2px;
+        padding:0 20px;
+        @include relative-center;
+        @include box-shadow
+    }
+
+    &__title{
+        text-align: center;
+        height: 100px;
+        @include grid-center;
+
+        p{
+            margin: 0;
+            font-weight: 600;
+            font-size: 27px;
+        }
+    }
+
+    &__inputs{
+        padding:10px 20px;
+        position: relative;
+    }
+    &__input{
+        margin-bottom: 30px;
+
+        input{
+            width: 100%;
+            height: 40px;
+            border: .5px solid black;
+            border-radius: 5px;
+            margin-top: 8px;
+            font-size: 17px;
+            padding-left: 12px;
+        }
+
+        &--btn{
+            height: 50px;
+        }
+    }
+
+
+}
+
+
+
+.signup_state{
+    height: 100vh;
+    position: relative;
+    &__box{
+        background-color: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 300px;
+        padding: 20px;
+        @include box_shadow;
+    }
+
+    &__title{
+        text-align: center;
+        
+    }
+
+    &__subtitle{
+        margin: 80px 0;
+        text-align: center;
+        font-size: 20px;
+
+    }
+
+    &__link{
+        text-align: center;
+        margin: 0 auto;
+
+        a{
+            cursor: pointer
+        }
+    }
+}
