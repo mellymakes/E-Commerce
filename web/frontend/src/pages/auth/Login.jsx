@@ -26,7 +26,9 @@ function Login({ auth, login }) {
 
     const onch = (e) => setLoginData({...loginData, [e.target.name]: e.target.value})
 
-    const onLog = async () =>{
+    const onLog = async e =>{
+
+        e.preventDefault()
 
         const { signal } = ac
 
@@ -69,19 +71,21 @@ function Login({ auth, login }) {
                     <div className="login__title">
                         <p>Login</p>
                     </div>
-                    <div className="login__inputs">
-                        <div className="login__input">
-                            <label htmlFor="">E-Mail</label><br/>
-                            <input type="text" name="email" value={email} onChange={onch}/>
+                    <form onSubmit={onLog}>
+                        <div className="login__inputs">
+                            <div className="login__input">
+                                <label htmlFor="">E-Mail</label><br/>
+                                <input type="text" name="email" value={email} onChange={onch}/>
+                            </div>
+                            <div className="login__input">
+                                <label htmlFor="">Password</label><br/>
+                                <input type="password" name="password" value={password} onChange={onch}/>
+                            </div>
+                            <div className="login__input--btn">
+                                <button className="pbutton relative-center login__button">Login</button>
+                            </div>
                         </div>
-                        <div className="login__input">
-                            <label htmlFor="">Password</label><br/>
-                            <input type="password" name="password" value={password} onChange={onch}/>
-                        </div>
-                        <div className="login__input--btn">
-                            <button className="pbutton relative-center login__button" onClick={onLog}>Login</button>
-                        </div>
-                    </div>
+                    </form>
 
                 </div>
 

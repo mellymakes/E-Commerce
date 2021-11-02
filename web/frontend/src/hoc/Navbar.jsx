@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { whiteLogo, burger } from '../img'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
+import AuthenticatedDrop from './components/authenticatedDrop.jsx'
+import NotAuthenticatedDrop from './components/notAuthenticatedDrop'
 import './scss/navbar.scss'
 
 function Navbar({ isAuth }) {
@@ -11,35 +13,13 @@ function Navbar({ isAuth }) {
     
     const dropdownClass = () => dropdown ? 'dropdown dropdown--active' : 'dropdown'
     
-    const logout = () => { localStorage.clear(); window.location.reload(); setDropdown(false) }
-
     const navItems = () => {
         if(isAuth){
 
-            return(
-                <>
-                <NavLink className="navin__option" to="/" exact activeClassName="navin__activeopt">
-                    Store
-                </NavLink>
-                <NavLink className="navin__option" to="/order" exact activeClassName="navin__activeopt">
-                    Order
-                </NavLink>
-                <NavLink className="navin__option" to="#" onClick={logout}>
-                    Log Out
-                </NavLink>
-                </>
-            )
+            return <AuthenticatedDrop setDropdown={setDropdown}/>
+
         }else{
-            return(
-                <>
-                <NavLink className="navin__option" to="/login" exact activeClassName="navin__activeopt">
-                    Login
-                </NavLink>
-                <NavLink className="navin__option" to="/signup" exact activeClassName="navin__activeopt">
-                    Sign Up
-                </NavLink>
-                </>
-            )
+            return <AuthenticatedDrop setDropdown={setDropdown} />
         }
     }
     const dropdownItems = () => {
@@ -53,7 +33,7 @@ function Navbar({ isAuth }) {
                 <NavLink className="dropin__option" to="/order" exact activeClassName='dropin__activeopt' onClick={() => setDropdown(false)}>
                     Order
                 </NavLink>
-                <NavLink className="dropin__option" to="#" onClick={logout}>
+                <NavLink className="dropin__option" to="#">
                     Log Out
                 </NavLink>
                 </>

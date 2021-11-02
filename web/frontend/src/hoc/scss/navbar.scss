@@ -85,6 +85,60 @@
         color: $lgrey;
         pointer-events: none;
     }
+
+    &__arrow{
+        position: relative;
+        svg{
+            width: 20px;
+            fill:#FFFFFF;
+            transition: transform 300ms;
+        }
+
+        &--down{
+            position: relative;
+            svg{
+                width: 20px;
+                fill:#FFFFFF;
+                transform: rotate(-180deg);
+                transition: transform 300ms;
+            }
+        }
+    }
+}
+
+.ddrop{
+    position: absolute;
+    top: -10000px;
+    background-color: lighten($color: $green, $amount: 10);
+    margin: 0;
+    padding: 10px 0px;
+    list-style: none;
+    width: 90px;
+    // right: 0px;
+    left: 0;
+    opacity: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+
+    a{
+        color: #fff;
+        text-decoration: none;
+        -webkit-user-select: none; /* Safari */        
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+    }
+
+    &__option{
+        padding: 10px 10px;
+        // background-color: lighten($color: $green, $amount: 10);
+        display: list-item;
+    }
+
+    &--active{
+        top: 60px;
+        opacity: 1;
+    }
 }
 
 
