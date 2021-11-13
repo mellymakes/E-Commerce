@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import url from '../../URL'
 import { useHistory } from 'react-router-dom'
 import PayPal from './components/PayPal'
+import { fetchingAnonOrder } from './utils'
+import { connect } from 'react-redux'
 import './scss/checkout.scss'
 
 const defaultShip = {
@@ -12,7 +14,7 @@ const defaultShip = {
     country: ''
 }
 
-export default function Checkout() {
+function Checkout({ isAuth }) {
 
     const [order, setorder] = useState({})
 
@@ -50,7 +52,8 @@ export default function Checkout() {
             }else{
 
                 localStorage.clear()
-                window.location.reload()
+                
+                fetchingAnonOrder(setorder)
             }
 
         }
@@ -58,6 +61,14 @@ export default function Checkout() {
         fetching()
 
     }, [])
+
+    useEffect(() =>{
+
+        const { is_shipping } = order
+
+        setCheckout(!is_shipping)
+
+    }, [order])
 
     const onch = e => {
 
@@ -124,6 +135,11 @@ export default function Checkout() {
     return (
         <div className="con-90-res">
             <div className="checkout">
+                    <div className="user-info">
+                        <div className="user">
+                            
+                        </div>
+                    </div>
                     <div className="info-paypal">
                         <div className="info">
                             <div className={shippingClass}>
@@ -187,3 +203,10 @@ export default function Checkout() {
         </div>
     )
 }
+
+const mapStateToProps = state =>{
+
+    return { isAuth: state.auth.is_authenticated }
+}
+
+export default connect(mapStateToProps, null)(Checkout)

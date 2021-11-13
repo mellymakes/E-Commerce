@@ -22,16 +22,47 @@ def product_view(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def get_order(request):
 
-    costumer = request.user.costumer
+    if request.user.is_authenticated: 
 
-    data, create = Order.objects.get_or_create(costumer=costumer, is_completed=False)
+        costumer = request.user.costumer
 
-    serializer = OrderSerializer(data, many=False)
+        data, create = Order.objects.get_or_create(costumer=costumer, is_completed=False)
 
-    return Response(serializer.data)
+        serializer = OrderSerializer(data, many=False)
+
+        return Response(serializer.data)
+    
+    else:
+
+        req = json.loads(request.data['cart'])
+
+        cart = req
+
+        productCart = []
+
+        for i in cart:
+
+            for n in range(cart[i]['value']):
+
+                obj = Product.objects.get(id=i)
+
+                productCart.append(obj)
+
+        # print(productCart)
+
+        serializer = ProductSerializer(productCart, many=True)
+
+        return Response(serializer.data)
+
+        
+
+        
+
+
+        
 
 
 @api_view(['POST', 'GET'])

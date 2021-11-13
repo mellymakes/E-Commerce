@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import OrderGrid from './components/OrderGrid'
 import url from '../../URL'
 import { Link } from 'react-router-dom'
+import { fetchingAnonOrder } from '../ecom/utils'
 import './scss/order.scss'
 
 
@@ -10,22 +11,28 @@ export default function Order() {
 
     const [order, setOrder] = useState({})
 
+
     const fetching = async () =>{
 
         const jwt = localStorage.getItem('access')
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `JWT ${jwt}`
-        }
 
-        const data = await fetch(url + 'ecom/order/', { headers }).then(res => res.json())
-
-        setOrder(data)
-
-        
+        if(jwt){
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${jwt}`
+            }
+    
+            const data = await fetch(url + 'ecom/order/', { headers }).then(res => res.json())
+    
+            setOrder(data)
+        }else{
+            
+            fetchingAnonOrder(setOrder)
+        } 
 
     }
+
 
     useEffect(() =>{
 
@@ -33,12 +40,11 @@ export default function Order() {
 
         if(jwt){
 
-            fetching(jwt)
+            fetching()
 
         }else{
 
-            localStorage.clear()
-            window.location.reload()
+            fetchingAnonOrder(setOrder)
         }
 
     }, [])
@@ -65,7 +71,7 @@ export default function Order() {
     return (    
         <div className="order con-90-res">
 
-            <div className="order__paper order__detailpaper">
+            <div className="order__paper  order__detailpaper">
 
                 <button>{`<--`}Continue Shopping</button>
 
