@@ -71,9 +71,18 @@ User = get_user_model()
 
 class Costumer(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    email = models.EmailField(blank=True, null=True, max_length=255)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 
 
     def __str__(self):
 
-        return self.user.email
+        email = 'Anonymous'
+
+        if self.user:
+
+            email = self.user.email
+        else:
+            pass
+
+        return email

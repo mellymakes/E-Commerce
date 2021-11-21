@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import url from '../../URL'
 import { useHistory } from 'react-router-dom'
 import PayPal from './components/PayPal'
+import { fetchingAnonOrder } from './utils'
+import { connect } from 'react-redux'
 import './scss/checkout.scss'
 
 const defaultShip = {
@@ -12,13 +14,15 @@ const defaultShip = {
     country: ''
 }
 
-export default function Checkout() {
+function Checkout({ isAuth }) {
 
     const [order, setorder] = useState({})
 
     const [ship, setShip] = useState(defaultShip)
 
-    const [checkout, setCheckout] = useState(false)
+    const [userEmail, setUserEmail] = useState('')
+
+    const [checkout, setCheckout] = useState(true)
 
 
     const history = useHistory()
@@ -50,7 +54,8 @@ export default function Checkout() {
             }else{
 
                 localStorage.clear()
-                window.location.reload()
+                
+                fetchingAnonOrder(setorder)
             }
 
         }
@@ -58,6 +63,19 @@ export default function Checkout() {
         fetching()
 
     }, [])
+
+    // useEffect(() =>{
+
+    //     const { is_shipping } = order
+
+    //     setCheckout(!is_shipping)
+    // }, [order])
+
+    useEffect(() =>{
+
+        setCheckout(false)
+
+    }, [ship, userEmail])
 
     const onch = e => {
 
@@ -73,7 +91,8 @@ export default function Checkout() {
     const orderitems = !order.oi ? [] : order.oi 
     // console.log(orderitems)
     const { address, city, state, zip_code, country } = ship 
-    const shippingClass = order.is_shipping ? '' : 'gone' 
+    const shippingClass = order.is_shipping ? 'info-paypal' : 'gone' 
+    const userBtnClass = !order.is_shipping ? 'info__btn' : 'gone' 
     const items = orderitems.map((data, index) => {
 
         const { pname, nitems, total_cost, img } = data
@@ -96,14 +115,43 @@ export default function Checkout() {
         return total
     }
 
+    console.log(order)
+
     const checkForm = e =>{
 
         e.preventDefault()
 
+        let bool = true
+
+        function checkEmail(email){
+
+            const regex = /(\w+[\.-]?\w+)@(\w+[\.-]?\w+)\.(\w{2,})/
+
+            const arra = regex.exec(email)
+
+            const result = arra ? arra[0] : arra
+
+            if(result === email){
+
+                return true
+            }else{
+
+                return false
+            }
+        }
+
+        if(!checkEmail(userEmail)){
+            
+            alert('E-Mail must be valid')
+
+            bool = false
+
+        }
+
+        if(order.is_shipping){
+
         const values = Object.values(ship)
 
-
-        let bool = true
 
         values.forEach(data =>{
              
@@ -113,8 +161,11 @@ export default function Checkout() {
             }
         })
 
+    }
+
+
         if(!bool){
-            console.log('Some shipping infos are missing')
+            console.log('Some infos are missing or incomplete')
         }
 
         setCheckout(bool)
@@ -124,9 +175,31 @@ export default function Checkout() {
     return (
         <div className="con-90-res">
             <div className="checkout">
-                    <div className="info-paypal">
+
+                    <div className="user-info">
+                        <div className="user">
+                            <h3 className="info__title">User Info</h3>
+                            <hr/>
+                   
+                            <form>
+                                <div className="user__formin">
+                                    <input type="text" onChange={e => setUserEmail(e.target.value)} className="user__input" value={userEmail} name="email" placeholder="E-Mail"/>
+                                </div>
+                                <div className={userBtnClass}>
+                                    
+                                    <div className="">
+                                        <button onClick={checkForm}>Submit</button>
+                                    </div>
+
+                                </div> 
+                            </form>
+            
+                        </div>
+                    </div>
+                    
+                    <div className={shippingClass}>
                         <div className="info">
-                            <div className={shippingClass}>
+                            <div>
                             <h3 className="info__title">shipping Info</h3>
                             <hr/>
                                 <form>
@@ -154,15 +227,25 @@ export default function Checkout() {
                             
                         </div>
 
-                        {
+
+
+                       
+                       
+
+                    </div>
+
+                    {
                             checkout ? (
-                                <PayPal order={order} ship={ship}/>
+                                <PayPal order={order} ship={ship} userEmail={userEmail}/>
                             ) : (
                                 <></>
                             )
                         }
 
-                    </div>
+
+                    
+
+
                     <div className="summary">
 
                         <h3 className="summary__title">Order summary</h3>
@@ -187,3 +270,10 @@ export default function Checkout() {
         </div>
     )
 }
+
+const mapStateToProps = state =>{
+
+    return { isAuth: state.auth.is_authenticated }
+}
+
+export default connect(mapStateToProps, null)(Checkout)

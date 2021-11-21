@@ -5,17 +5,23 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: 
+    'user summary'
     'info summary'
     'paypal summary';
     grid-column-gap: 40px;
 }
 
 
-.info, .summary, .paypal{
+form{
+    margin-top: 30px;
+}
+
+.info, .summary, .paypal, .user{
 
     padding: 20px;
     background-color: #fff;
     @include box-shadow;
+    margin-bottom: 10px;
 }
 
 // .info-paypal{
@@ -39,9 +45,6 @@
         // display: none;
     }
 
-    form{
-        margin-top: 30px;
-    }
 
     &__inputgrid{
         display: grid;
@@ -63,7 +66,6 @@
         }
     }
 }
-
 
 
 
@@ -92,4 +94,20 @@
 .paypal{
     margin-top: 20px;
     grid-area: paypal;
+}
+
+.user{
+
+    grid-area: user;
+    &__formin{
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+
+    }
+
+    input{
+        height: 30px;
+    }
 }

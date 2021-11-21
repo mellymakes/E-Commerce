@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Product, Order, OrderItem
 from .serializer import ProductSerializer, OrderSerializer, ShippingInfo, ShippingInfoSerializer
+from authorization.models import Costumer, Account
 import json
 import datetime
 import math
@@ -22,16 +23,48 @@ def product_view(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def get_order(request):
 
-    costumer = request.user.costumer
+    if request.user.is_authenticated: 
 
-    data, create = Order.objects.get_or_create(costumer=costumer, is_completed=False)
+        costumer = request.user.costumer
 
-    serializer = OrderSerializer(data, many=False)
+        data, create = Order.objects.get_or_create(costumer=costumer, is_completed=False)
 
-    return Response(serializer.data)
+        serializer = OrderSerializer(data, many=False)
+
+        return Response(serializer.data)
+    
+    else:
+
+        req = json.loads(request.data['cart'])
+
+        cart = req
+
+        productCart = []
+
+
+        for i in cart:
+
+            for n in range(cart[i]['value']):
+
+                obj = Product.objects.get(id=i)
+
+                productCart.append(obj)
+
+        # print(productCart)
+
+        serializer = ProductSerializer(productCart, many=True)
+
+        return Response(serializer.data)
+
+        
+
+        
+
+
+        
 
 
 @api_view(['POST', 'GET'])
@@ -91,26 +124,66 @@ def process_order(request):
     if request.method == 'POST':
         
         transaction_id = datetime.datetime.now().timestamp()
-
         data = request.data
-        cstmr = request.user.costumer
-        order, create = Order.objects.get_or_create(costumer=cstmr, is_completed=False)
-
-        # print(order.transaction_id)
-
-        order.transaction_id = transaction_id
-
-        if math.ceil(order.total_cost) == math.ceil(data['order']['total_cost']):
-
-            order.is_completed = True
-            order.save()
+        
+        if request.user.is_authenticated:
 
 
-        if order.is_shipping:
+            cstmr = request.user.costumer
+            order, create = Order.objects.get_or_create(costumer=cstmr, is_completed=False)
 
-            SI = ShippingInfo.objects.create(costumer=cstmr, order=order, address=data['address'], city=data['city'], state=data['state'],
-                                         zip_code=data['zip_code'], country=data['country'])
+            # print(order.transaction_id)
 
-        # print(data)
+            order.transaction_id = transaction_id
 
-        return Response('processed')
+            if math.ceil(order.total_cost) == math.ceil(data['order']['total_cost']):
+
+                order.is_completed = True
+                order.save()
+
+
+            if order.is_shipping:
+
+                SI = ShippingInfo.objects.create(costumer=cstmr, order=order, address=data['address'], city=data['city'], state=data['state'],
+                                            zip_code=data['zip_code'], country=data['country'])
+
+            # print(data)
+
+            return Response('processed')
+
+        else:
+
+            cstmr = Costumer.objects.create(email=data['email'])
+            order = Order.objects.create(costumer=cstmr)
+            orderi = data['order']
+            check_total_cost = 0
+
+            for i in orderi['oi']:
+
+                product = Product.objects.get(id=i['id'])
+
+                check_total_cost = check_total_cost + product.price * i['nitems']
+
+                OrderItem.objects.create(product=product, order=order, nitems=i['nitems'])
+            
+            order.transaction_id = transaction_id
+
+            if math.ceil(check_total_cost) == math.ceil(orderi['total_cost']):
+
+                order.is_completed = True
+                order.save()
+            
+            if order.is_shipping:
+
+                SI = ShippingInfo.objects.create(costumer=cstmr, order=order, address=data['address'], city=data['city'], state=data['state'],
+                                            zip_code=data['zip_code'], country=data['country'])
+
+            return Response('non logged in process success')
+
+
+
+            
+
+
+
+        
