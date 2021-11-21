@@ -67,7 +67,7 @@ class Order(models.Model):
 
     def __str__(self):
 
-        email = 'Anonymous'
+        email = 'None'
 
         if self.costumer.user:
 
