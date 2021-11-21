@@ -67,7 +67,16 @@ class Order(models.Model):
 
     def __str__(self):
 
-        return f'{self.id} {self.costumer.user.email} {self.transaction_id}'
+        email = 'Anonymous'
+
+        if self.costumer.user:
+
+            email = self.costumer.user.email
+
+        else:
+            pass
+
+        return f'{self.id} {email} {self.transaction_id}'
 
 
 class OrderItem(models.Model):

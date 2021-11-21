@@ -86,6 +86,8 @@ const fetchingAnonOrder = async setOrder =>{
     const orderr = {
         total_cost: 0,
         total_items: 0,
+        is_shipping: false,
+        transaction_id: null,
         oi:[]
     }  
 
@@ -98,6 +100,13 @@ const fetchingAnonOrder = async setOrder =>{
         const item = cleanedArr.find(dddata => dddata.id === ddata.id)
 
         orderr.total_cost += ddata.price 
+
+
+        if(!ddata.is_digital){
+            orderr.is_shipping = true
+            
+        }
+        
 
         if(item === undefined){
 

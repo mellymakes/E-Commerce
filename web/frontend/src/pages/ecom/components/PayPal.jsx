@@ -1,58 +1,71 @@
 import React, { useState, useEffect, useRef } from 'react'
 import url from '../../../URL'
+import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-export default function PayPal({ order, ship }) {
+function PayPal({ order, ship, isAuth, userEmail: email }) {
 
     
-    // const [orderrr, setOrder] = useState({})
-
     const history = useHistory()
     const paypalDiv = useRef()
 
 
-    // useEffect(() =>{
-
-    //     const headers = { 
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `JWT ${localStorage.getItem('access')}`
-    //     }
-
-
-    //     fetch(url + 'ecom/order', { method: 'GET', headers }).then(res => res.json()).then(data =>{
-
-    //         setOrder(data)
-    //         console.log(data)
-    //     })
-
-    // }, [])
-
-
     const processOrder = async () => {
 
-        const jwt = localStorage.getItem('access')
+       if(isAuth){
 
-        const headers = {
-            "Content-Type": "application/json",
-            "Authorization": `JWT ${jwt}`
-        }
+            const jwt = localStorage.getItem('access')
 
-        const body = JSON.stringify({ order, ...ship })
-
-        try{
-
-            const data = await fetch(url + 'ecom/process_order/', { method:'POST', headers, body }).then(res => res.json())
-
-            if(data === 'processed'){
-
-                history.push('/')
-            }else{
-                alert('something went wrong')
+            const headers = {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${jwt}`
             }
 
-        }
-        catch(err){
-            console.log(err)
+            const body = JSON.stringify({ order, ...ship })
+
+            try{
+
+                const data = await fetch(url + 'ecom/process_order/', { method:'POST', headers, body }).then(res => res.json())
+
+                if(data === 'processed'){
+
+                    history.push('/')
+                }else{
+                    alert('something went wrong')
+                }
+
+            }
+            catch(err){
+                console.log(err)
+            }
+
+        }else{
+
+            const headers = {
+                'Content-Type': 'application/json'
+            }
+
+            const body = JSON.stringify({ order, email, ...ship })
+
+            try{
+
+                const data = await fetch(url + 'ecom/process_order/', { method: 'POST', headers, body }).then(res => res.json())
+
+                if(data === 'non logged in process success'){
+
+                    document.cookie="cart={}"
+                    history.push('/')
+
+                }else{
+
+                    alert('something went wrong')
+
+                }
+            }
+            catch(err){
+
+                console.error(err)
+            }
         }
 
     }
@@ -109,3 +122,12 @@ export default function PayPal({ order, ship }) {
         </div>
     )
 }
+
+const mapStateToProps = state => {
+
+    return{
+        isAuth: state.auth.is_authenticated
+    }
+}
+
+export default connect(mapStateToProps, null)(PayPal)
