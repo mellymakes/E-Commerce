@@ -44,6 +44,17 @@ def get_order(request):
 
         productCart = []
 
+        orderr = {
+
+            "is_shipping": False,
+            "oi": [],
+            "total_cost": 0,
+            "total_items": 0,
+            "transaction_id": None
+
+        }
+        
+
 
         for i in cart:
 
@@ -54,10 +65,43 @@ def get_order(request):
                 productCart.append(obj)
 
         # print(productCart)
+        
 
         serializer = ProductSerializer(productCart, many=True)
 
-        return Response(serializer.data)
+        cleanedCart = []
+
+        for i in serializer.data:
+
+            foundInClean = False
+
+            orderr['total_cost'] += i['price']
+            orderr['total_items'] += 1
+
+            for u in cleanedCart:
+
+                if i['name'] == u['pname']:
+
+                    u['nitems'] += 1
+                    u['total_cost'] += i['price']
+                    foundInClean = True
+            
+            if not foundInClean:
+
+                cleaned_data = {
+                    "id": i['id'],
+                    "img": i['image'],
+                    "pname": i['name'],
+                    "total_cost": i['price'],
+                    "nitems": 1,
+                }
+
+                cleanedCart.append(cleaned_data)
+
+
+        orderr['oi'] = cleanedCart
+
+        return Response(orderr)
 
         
 

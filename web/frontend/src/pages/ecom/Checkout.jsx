@@ -257,7 +257,7 @@ function Checkout({ isAuth }) {
                         <div className="summary__conclusion">
 
                             <h3>Total Costs: {order.total_cost}$</h3>
-                            <h3>Items: {total_nitems()}</h3>
+                            <h3>Items: {order.total_items}</h3>
 
                             
                         </div>

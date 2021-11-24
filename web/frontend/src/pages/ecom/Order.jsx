@@ -49,19 +49,7 @@ export default function Order() {
 
     }, [])
 
-    const { total_cost } = order
-
-    const total_items = () => {
-
-        let total = 0
-
-        if(order.oi){
-
-            order.oi.forEach(data => total = total + data.nitems)
-        }
-
-        return total
-    }
+    const { total_cost, total_items } = order
 
     const orderItems = order.oi ? order.oi : []
 
@@ -80,7 +68,7 @@ export default function Order() {
                     <div className="order__detailcard">
 
                         <h2 className="title">Total Items</h2>
-                        <h3>{total_items()}</h3>
+                        <h3>{total_items}</h3>
                         
                     </div>
                     <div className="order__detailcard">
