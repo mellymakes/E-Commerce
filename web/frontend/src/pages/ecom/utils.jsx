@@ -82,58 +82,11 @@ const fetchingAnonOrder = async setOrder =>{
     const body = JSON.stringify({ cart })
 
     const data = await fetch('http://localhost:8000/api/ecom/order/', { method: 'POST', headers, body }).then(res => res.json())
-
-    const orderr = {
-        total_cost: 0,
-        total_items: 0,
-        is_shipping: false,
-        transaction_id: null,
-        oi:[]
-    }  
-
-    // console.log(data)
-
-    let cleanedArr = []
-
-    data.forEach(function(ddata){
-
-        const item = cleanedArr.find(dddata => dddata.id === ddata.id)
-
-        orderr.total_cost += ddata.price 
-
-
-        if(!ddata.is_digital){
-            orderr.is_shipping = true
-            
-        }
-        
-
-        if(item === undefined){
-
-            cleanedArr.push({...ddata, nitems: 1, img: ddata.image, pname: ddata.name})
-
-        }else{
-
-            item.nitems += 1
-            
-        }
-
-    })
-
-    cleanedArr = cleanedArr.map(data => {
-
-        const total_cost = data.nitems * data.price
-
-        orderr.total_items += data.nitems
-
-        return { ...data, total_cost }
-    })
-
-
-    orderr.oi = cleanedArr
     
-    setOrder(orderr)
 
+    console.log(data)
+
+    setOrder(data)
 }
 
 
